@@ -1,0 +1,47 @@
+<html>
+    <head>
+
+    </head>
+    <header>
+        <script src="index.js" async></script>
+    </header>
+    <head>
+        <form id="profileForm">
+            <div class="form_row_input">
+                <label for="usernameInput">Username:</label>
+                <input id="usernameInput" type="text" required pattern="[A-Za-z]+">
+                <button type="button" onclick='getProfile(document.getElementById("usernameInput").value)'>Submit</button>
+            </div>
+        </form>
+    </head>
+    <body>
+        <div style="display: flex">
+            <table id="skillTable">
+                <thead>
+                    <tr>
+                        <th >Skills</th>
+                    </tr>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Rank</th>
+                        <th>Level</th>
+                        <th>Experience</th>
+                    </tr>
+                </thead>
+                <tbody id="skillTableBody"></tbody>
+            </table>
+            <table id="otherTable">
+                <thead>
+                    <tr>
+                        <th>Minigames / Bosses</th>
+                    </tr>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Participation</th>
+                    </tr>
+                </thead>
+                <tbody id="otherTableBody"></tbody>
+            </table>
+        </div>
+    </body>
+</html>
