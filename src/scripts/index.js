@@ -83,6 +83,22 @@ const HISCORE_PROFILE = [
 
 let skillsTable = document.getElementById('skillTableBody')
 let otherTable = document.getElementById('otherTableBody')
+let profileForm = document.getElementById("profileForm");
+
+profileForm.addEventListener('submit', parseData);
+
+function parseData(event) {
+    event.preventDefault();
+    let username = profileForm.elements["username"].value;
+    document.querySelectorAll("table tbody tr").forEach(row => {row.remove()})
+    getData(`https://cors-anywhere.herokuapp.com/secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=${username}`)
+    .then(data => {
+        let results = Object.fromEntries(HISCORE_PROFILE.map((_, i) => [HISCORE_PROFILE[i], parseStats(data)[i]]))
+        buildTable(results)
+    })
+    .catch(error => console.log(error))
+} 
+
 
 async function getData(url = '', data = {}) {
     const response = await fetch(url, {
@@ -132,14 +148,3 @@ function buildTable(data){
         })
     })
 }
-
-function getProfile(username){
-    document.querySelectorAll("table tbody tr").forEach(row => {row.remove()})
-    getData(`https://cors-anywhere.herokuapp.com/secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=${username}`)
-    .then(data => {
-        let results = Object.fromEntries(HISCORE_PROFILE.map((_, i) => [HISCORE_PROFILE[i], parseStats(data)[i]]))
-        buildTable(results)
-    })
-    .catch(error => console.log(error))
-}
-
