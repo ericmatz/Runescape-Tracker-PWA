@@ -134,6 +134,7 @@ function buildTable(data){
 }
 
 function getProfile(username){
+    document.querySelectorAll("table tbody tr").forEach(row => {row.remove()})
     getData(`https://cors-anywhere.herokuapp.com/secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=${username}`)
     .then(data => {
         let results = Object.fromEntries(HISCORE_PROFILE.map((_, i) => [HISCORE_PROFILE[i], parseStats(data)[i]]))
