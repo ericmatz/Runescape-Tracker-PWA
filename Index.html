@@ -4,12 +4,16 @@
     </head>
     <header>
         <script src="src/scripts/index.js" async></script>
+        <script src="src/scripts/database.js" async></script>
+        <link rel="stylesheet" href="src/css/index.css">
+        <link rel="stylesheet" href="src/css/form.css">
     </header>
     <head>
         <form id="profileForm">
-            <div class="form_row_input">
+            <div class="form-group" id="usernameFormGroup">
                 <label for="usernameInput">Username:</label>
                 <input name="username" id="usernameInput" type="text" required pattern="[A-Za-z]+">
+                <label for="usernameInput" id="usernameHelper"></label>
                 <button type="submit">Submit</button>
             </div>
         </form>
@@ -38,6 +42,18 @@
                     <tr>
                         <th>Rank</th>
                         <th>Participation</th>
+                    </tr>
+                </thead>
+                <tbody id="otherTableBody"></tbody>
+            </table>
+            <table id="userTable">
+                <thead>
+                    <tr>
+                        <th>Tracked Users</th>
+                    </tr>
+                    <tr>
+                        <th>Actions</th>
+                        <th>User</th>
                     </tr>
                 </thead>
                 <tbody id="otherTableBody"></tbody>
