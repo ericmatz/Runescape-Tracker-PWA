@@ -1,48 +1,73 @@
-if (!window.indexedDB) {
-  alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
-}
+window.onload = (function () {
 
-// Let us open our database
-var request = window.indexedDB.open("username", 3);
-var db;
+  const DATABASE_NAME = "runescape_tracker_pwa";
+  let database;
+  let request = indexedDB.open(DATABASE_NAME, 1);
 
-request.onerror = function(event) {
-  // Do something with request.errorCode!
-  console.error("Database error: " + event.target.errorCode);
-};
-
-request.onsuccess = function(event) {
-  // Do something with request.result!
-  db = event.target.result;
-};
-
-request.onupgradeneeded = function(event) {
-  var db = event.target.result;
-
-  // Create an objectStore to hold information about our customers. We're
-  // going to use "ssn" as our key path because it's guaranteed to be
-  // unique - or at least that's what I was told during the kickoff meeting.
-  var objectStore = db.createObjectStore("users", {
-    keyPath: "username"
-  });
-
-  // Create an index to search customers by name. We may have duplicates
-  // so we can't use a unique index.
-  objectStore.createIndex("username", "username", {
-    unique: true
-  });
-
-  // Use transaction oncomplete to make sure the objectStore creation is
-  // finished before adding data into it.
-  objectStore.transaction.oncomplete = function(event) {
-    // Store values in the newly created objectStore.
-    // var usersObjectStore = db.transaction("users", "readwrite").objectStore("users");
-    // userData.forEach(function(customer) {
-    //   customerObjectStore.add(customer);
-    // });
+  request.onerror = function () {
+    console.log("failed opening DB: " + request.errorCode + "\n" + request.error)
   };
-};
 
-function addRecord(user){
-  db.transaction("users", "readwrite").objectStore("users").add(user);
-}
+  request.onupgradeneeded = function () {
+    console.log('OnUpgradeNeeded - Called')
+    let database = request.result;
+
+    if (!database.objectStoreNames.contains('users')) {
+      let user_table = database.createObjectStore('users', {
+        keyPath: "username",
+        autoIncrement: true
+      });
+      user_table.createIndex('type', 'type', {
+        unique: false
+      });
+    }
+
+    if (!database.objectStoreNames.contains('records')) {
+      let records_table = database.createObjectStore('records', {
+        autoIncrement: true
+      })
+      records_table.createIndex('username', 'username', {
+        unique: false
+      });
+      records_table.createIndex('date', 'date', {
+        unique: false
+      });
+    }
+
+  };
+
+  request.onsuccess = function (event) {
+    database = request.result
+    addRecord({'username':'Limerain2','type':'ironman'})
+  }
+
+  function addRecord(data) {
+
+    var transaction = database.transaction("users", "readwrite");
+
+    // Do something when all the data is added to the database.
+    transaction.oncomplete = function (event) {
+      console.log("Record Inserted");
+    };
+
+    transaction.onerror = function (event) {
+      // Don't forget to handle errors!
+      console.log("An error occurred in addRecord:")
+      console.log({
+        'Data': data,
+        'Error': event
+      })
+    };
+
+    var objectStore = transaction.objectStore("users");
+
+    var request = objectStore.add(data);
+
+    request.onsuccess = function (event) {
+      console.log(event.target.result)
+      // event.target.result === customer.ssn;
+    };
+
+  }
+
+})
