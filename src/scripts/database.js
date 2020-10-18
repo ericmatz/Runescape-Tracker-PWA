@@ -37,13 +37,18 @@ window.onload = (function () {
   };
 
   request.onsuccess = function (event) {
+    const username = 'Limerain6'
     database = request.result
-    addRecord({'username':'Limerain2','type':'ironman'})
+    addRecord({
+      'username': username,
+      'type': 'normie'
+    })
+    deleteRecord(username)
   }
 
   function addRecord(data) {
 
-    var transaction = database.transaction("users", "readwrite");
+    let transaction = database.transaction("users", "readwrite");
 
     // Do something when all the data is added to the database.
     transaction.oncomplete = function (event) {
@@ -55,7 +60,7 @@ window.onload = (function () {
       console.log("An error occurred in addRecord:")
       console.log({
         'Data': data,
-        'Error': event
+        'Error': event.target.error
       })
     };
 
@@ -68,6 +73,39 @@ window.onload = (function () {
       // event.target.result === customer.ssn;
     };
 
+  }
+
+  function getRecords() {
+
+  }
+
+  function deleteRecord(username) {
+    var delete_transaction = database.transaction("users", "readwrite");
+
+    delete_transaction.onerror = function (event) {
+      console.log("An error occurred in removeRecord:")
+      console.log({
+        'username': username,
+        'Error': event.target.error
+      })
+    }
+
+    delete_transaction.onsuccess = function (event) {
+      console.log(event.target.result)
+    }
+
+    var objectStore = delete_transaction.objectStore("users");
+
+    var delete_request = objectStore.delete(username)
+  
+    delete_request.onsuccess = function (event) {
+      console.log(event.target.result)
+    }
+  
+    delete_request.onerror = function(event){
+      console.log("Error in RemoveRecord request:")
+      console.log(event.target.error)
+    }
   }
 
 })
