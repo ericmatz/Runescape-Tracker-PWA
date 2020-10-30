@@ -48,7 +48,7 @@ window.onload = (function () {
 
   function addRecord(data) {
 
-    let transaction = database.transaction("users", "readwrite");
+    let transaction = database.transaction(["users","records"], "readwrite");
 
     // Do something when all the data is added to the database.
     transaction.oncomplete = function (event) {
@@ -66,17 +66,50 @@ window.onload = (function () {
 
     var objectStore = transaction.objectStore("users");
 
-    var request = objectStore.add(data);
+    //Insert user record
+    var user_request = objectStore.add({'username':data.username,'type':data.type});
 
-    request.onsuccess = function (event) {
+    user_request.onsuccess = function (event) {
       console.log(event.target.result)
-      // event.target.result === customer.ssn;
+    };
+
+    user_request.onerror = function (event) {
+      console.log("An error occurred while inserting user record:")
+      console.log({
+        'Data': {'username':data.username,'type':data.type},
+        'Error': event.target.error
+      })
     };
 
   }
 
-  function getRecords() {
+  function getRecords(username) {
+    var select_transaction = database.transaction(["records"], "readonly");
 
+    select_transaction.onerror = function (event) {
+      console.log("An error occurred in getRecords:")
+      console.log({
+        'username': username,
+        'Error': event.target.error
+      })
+    }
+
+    select_transaction.onsuccess = function (event){
+      console.log(event.target.Data);
+    }
+
+    var objectStore = select_transaction.objectStore("records");
+
+    var select_request = objectStore.getAll(IDBKeyRange.only(username));
+
+    select_request.onsuccess = function (event) {
+      console.log(event.target.result)
+    }
+  
+    select_request.onerror = function(event){
+      console.log("Error in getRecords request:")
+      console.log(event.target.error)
+    }
   }
 
   function deleteRecord(username) {
