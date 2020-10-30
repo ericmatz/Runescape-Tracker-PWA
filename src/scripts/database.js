@@ -36,47 +36,34 @@ window.onload = (function () {
 
   };
 
-  request.onsuccess = function (event) {
-    const username = 'Limerain6'
+  request.onsuccess = function () {
     database = request.result
-    addRecord({
-      'username': username,
-      'type': 'normie'
-    })
-    deleteRecord(username)
   }
 
   function addRecord(data) {
 
-    let transaction = database.transaction(["users","records"], "readwrite");
+    let transaction = database.transaction("records", "readwrite");
 
-    // Do something when all the data is added to the database.
-    transaction.oncomplete = function (event) {
-      console.log("Record Inserted");
+    transaction.oncomplete = function () {
+      console.log("Add Transaction Successful.");
     };
 
     transaction.onerror = function (event) {
-      // Don't forget to handle errors!
-      console.log("An error occurred in addRecord:")
+      console.log(`Error: Add Record - Transaction: ${{'Data': data,'Error': event.target.error}}`)
+    };
+
+    var objectStore = transaction.objectStore("records");
+
+    var record_request = objectStore.add(data);
+
+    record_request.onsuccess = function (event) {
+      console.log("Add Request Successful.")
+    };
+
+    record_request.onerror = function (event) {
+      console.log("Error: Add Record - Request:")
       console.log({
         'Data': data,
-        'Error': event.target.error
-      })
-    };
-
-    var objectStore = transaction.objectStore("users");
-
-    //Insert user record
-    var user_request = objectStore.add({'username':data.username,'type':data.type});
-
-    user_request.onsuccess = function (event) {
-      console.log(event.target.result)
-    };
-
-    user_request.onerror = function (event) {
-      console.log("An error occurred while inserting user record:")
-      console.log({
-        'Data': {'username':data.username,'type':data.type},
         'Error': event.target.error
       })
     };
@@ -84,60 +71,50 @@ window.onload = (function () {
   }
 
   function getRecords(username) {
-    var select_transaction = database.transaction(["records"], "readonly");
+    var get_transaction = database.transaction(["records"], "readonly");
 
-    select_transaction.onerror = function (event) {
-      console.log("An error occurred in getRecords:")
-      console.log({
-        'username': username,
-        'Error': event.target.error
-      })
+    get_transaction.onerror = function (event) {
+      console.log(`Error: Get All Records - Transaction: ${{'username':username,'Error':event.target.error}}`)
     }
 
-    select_transaction.onsuccess = function (event){
-      console.log(event.target.Data);
+    get_transaction.onsuccess = function (event){
+      console.log("Get All Transaction Successful")
     }
 
-    var objectStore = select_transaction.objectStore("records");
+    var objectStore = get_transaction.objectStore("records");
 
-    var select_request = objectStore.getAll(IDBKeyRange.only(username));
+    var get_all_request = objectStore.getAll(IDBKeyRange.only(username));
 
-    select_request.onsuccess = function (event) {
-      console.log(event.target.result)
+    get_all_request.onsuccess = function (event) {
+      console.log("Get All Request Successful");
     }
   
-    select_request.onerror = function(event){
-      console.log("Error in getRecords request:")
-      console.log(event.target.error)
+    get_all_request.onerror = function(event){
+      console.log(`Error: Get All Records - Request: ${{'username':username,'Error':event.target.error}}`);
     }
   }
 
   function deleteRecord(username) {
-    var delete_transaction = database.transaction("users", "readwrite");
+    var delete_transaction = database.transaction("records", "readwrite");
 
     delete_transaction.onerror = function (event) {
-      console.log("An error occurred in removeRecord:")
-      console.log({
-        'username': username,
-        'Error': event.target.error
-      })
+      console.log(`Error: Delete Record - Transaction: ${{'username':username,'Error:':event.target.error}}`)
     }
 
     delete_transaction.onsuccess = function (event) {
-      console.log(event.target.result)
+      console.log("Delete Transaction Successful")
     }
 
-    var objectStore = delete_transaction.objectStore("users");
+    var objectStore = delete_transaction.objectStore("records");
 
     var delete_request = objectStore.delete(username)
   
-    delete_request.onsuccess = function (event) {
-      console.log(event.target.result)
+    delete_request.onsuccess = function () {
+      console.log("Delete Record Request Successful")
     }
   
     delete_request.onerror = function(event){
-      console.log("Error in RemoveRecord request:")
-      console.log(event.target.error)
+      console.log(`Error: Delete Record - Request: ${{'username':username,'Error:':event.target.error}}`)
     }
   }
 
