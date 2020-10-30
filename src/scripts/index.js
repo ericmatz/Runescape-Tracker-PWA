@@ -1,5 +1,4 @@
 
-window.onload = (function () {
 
   const HISCORE_PROFILE = [
     'Overall',
@@ -179,4 +178,3 @@ window.onload = (function () {
     })
   }
 
-});

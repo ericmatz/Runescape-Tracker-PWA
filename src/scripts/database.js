@@ -1,4 +1,3 @@
-window.onload = (function () {
 
   const DATABASE_NAME = "runescape_tracker_pwa";
   let database;
@@ -117,5 +116,3 @@ window.onload = (function () {
       console.log(`Error: Delete Record - Request: ${{'username':username,'Error:':event.target.error}}`)
     }
   }
-
-})
