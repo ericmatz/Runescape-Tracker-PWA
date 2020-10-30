@@ -28,7 +28,7 @@
       records_table.createIndex('username', 'username', {
         unique: false
       });
-      records_table.createIndex('date', 'date', {
+      records_table.createIndex('timestamp', 'timestamp', {
         unique: false
       });
     }

@@ -107,6 +107,7 @@
         let results = {};
         results['hiscores'] = Object.fromEntries(HISCORE_PROFILE.map((_, i) => [HISCORE_PROFILE[i], parseStats(data)[i]]))
         results['username'] = username
+        results['timestamp'] = Date.getUTCDate()
         console.log(results)
         document.getElementById("usernameLoader").remove()
         buildTable(results['hiscores'])
