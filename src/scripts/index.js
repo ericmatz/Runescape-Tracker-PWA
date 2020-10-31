@@ -82,15 +82,15 @@
     'Zulrah'
   ]
   
-
+window.onload=function(){
   let skillsTable = document.getElementById('skillTableBody')
   let otherTable = document.getElementById('otherTableBody')
   let profileForm = document.getElementById("profileForm")
   let usernameFormGroup = document.getElementById("usernameFormGroup")
-
   let userNameHelper = document.getElementById("usernameHelper")
-
+  
   profileForm.addEventListener('submit', parseData);
+
 
   function parseData(event) {
     event.preventDefault();
@@ -107,7 +107,7 @@
         let results = {};
         results['hiscores'] = Object.fromEntries(HISCORE_PROFILE.map((_, i) => [HISCORE_PROFILE[i], parseStats(data)[i]]))
         results['username'] = username
-        results['timestamp'] = Date.getUTCDate()
+        results['timestamp'] = Date.now()
         console.log(results)
         document.getElementById("usernameLoader").remove()
         buildTable(results['hiscores'])
@@ -179,3 +179,4 @@
     })
   }
 
+}

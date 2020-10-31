@@ -28,9 +28,6 @@
       records_table.createIndex('username', 'username', {
         unique: false
       });
-      records_table.createIndex('timestamp', 'timestamp', {
-        unique: false
-      });
     }
 
   };
@@ -70,22 +67,23 @@
   }
 
   function getRecords(username) {
-    var get_transaction = database.transaction(["records"], "readonly");
+    var get_transaction = database.transaction("records", "readonly");
 
     get_transaction.onerror = function (event) {
       console.log(`Error: Get All Records - Transaction: ${{'username':username,'Error':event.target.error}}`)
     }
 
-    get_transaction.onsuccess = function (event){
+    get_transaction.onsuccess = function (){
       console.log("Get All Transaction Successful")
     }
 
     var objectStore = get_transaction.objectStore("records");
 
-    var get_all_request = objectStore.getAll(IDBKeyRange.only(username));
+    var get_all_request = objectStore.getAll();
 
     get_all_request.onsuccess = function (event) {
       console.log("Get All Request Successful");
+      console.log(event.target.result);
     }
   
     get_all_request.onerror = function(event){
