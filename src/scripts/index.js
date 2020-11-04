@@ -107,6 +107,7 @@ window.onload=function(){
         let results = {};
         results['hiscores'] = Object.fromEntries(HISCORE_PROFILE.map((_, i) => [HISCORE_PROFILE[i], parseStats(data)[i]]))
         results['username'] = username
+        results['type'] = 'normal'
         results['timestamp'] = Date.now()
         console.log(results)
         document.getElementById("usernameLoader").remove()
@@ -158,14 +159,18 @@ window.onload=function(){
       stats.length == 3 ?
         entry = ['Rank', 'Level', 'Experience'] :
         stats.length == 2 ?
-        entry = ['Rank', 'Level'] :
+        entry = ['Rank', 'Participation'] :
         _throw(`Improper data structure in parseData, length: ${stats.length} \n stats: ${stats}`)
+        stats = stats.map(function(stat){
+          return (stat === "-1" ? 0 : parseInt(stat))
+        })
       stats_list.push(Object.fromEntries(entry.map((_, i) => [entry[i], stats[i]])))
     });
     return stats_list
   }
 
   function buildTable(data) {
+    //for each row i.e. boss/skill | rank | xp
     Object.entries(data).forEach(([key, value]) => {
       Object.keys(value).length == 3 ?
         newRow = skillsTable.insertRow(-1) :
@@ -173,6 +178,7 @@ window.onload=function(){
         newRow = otherTable.insertRow(-1) :
         _throw(`Error: Unknown Data Structure In buildTable: \n Key: ${key} \n Value: ${value}`)
       newRow.insertCell(-1).appendChild(document.createTextNode(key))
+      //for each cell in row
       Object.entries(value).forEach(([key, value]) => {
         newRow.insertCell(-1).appendChild(document.createTextNode(value));
       })

@@ -1,7 +1,7 @@
 
   const DATABASE_NAME = "runescape_tracker_pwa";
   let database;
-  let request = indexedDB.open(DATABASE_NAME, 1);
+  let request = indexedDB.open(DATABASE_NAME, 2.1);
 
   request.onerror = function () {
     console.log("failed opening DB: " + request.errorCode + "\n" + request.error)
@@ -11,23 +11,14 @@
     console.log('OnUpgradeNeeded - Called')
     let database = request.result;
 
-    if (!database.objectStoreNames.contains('users')) {
-      let user_table = database.createObjectStore('users', {
-        keyPath: "username",
-        autoIncrement: true
-      });
-      user_table.createIndex('type', 'type', {
-        unique: false
-      });
-    }
-
+    //Create Table
     if (!database.objectStoreNames.contains('records')) {
       let records_table = database.createObjectStore('records', {
         autoIncrement: true
       })
-      records_table.createIndex('username', 'username', {
-        unique: false
-      });
+      //objectStore.createIndex(indexName, keyPath, { unique: false });
+      records_table.createIndex('username', 'username', {unique: false});
+      records_table.createIndex('type', 'type', {unique: false});
     }
 
   };
@@ -52,7 +43,7 @@
 
     var record_request = objectStore.add(data);
 
-    record_request.onsuccess = function (event) {
+    record_request.onsuccess = function () {
       console.log("Add Request Successful.")
     };
 
@@ -79,7 +70,7 @@
 
     var objectStore = get_transaction.objectStore("records");
 
-    var get_all_request = objectStore.getAll();
+    var get_all_request = objectStore.index('username').getAll(username);
 
     get_all_request.onsuccess = function (event) {
       console.log("Get All Request Successful");
@@ -112,5 +103,30 @@
   
     delete_request.onerror = function(event){
       console.log(`Error: Delete Record - Request: ${{'username':username,'Error:':event.target.error}}`)
+    }
+  }
+
+  function getUsers(){
+    var get_transaction = database.transaction("records", "readonly");
+
+    get_transaction.onerror = function (event) {
+      console.log(`Error: Get Users - Transaction: ${{'Error:':event.target.error}}`)
+    }
+
+    get_transaction.onsuccess = function (event) {
+      console.log("Get Transaction Successful")
+    }
+
+    var objectStore = get_transaction.objectStore("records");
+
+    var get_request = objectStore.index('username').getAllKeys()
+
+    get_request.onsuccess = function () {
+      console.log("Get Users Request Successful")
+      console.log(get_request.result)
+    }
+  
+    get_request.onerror = function(event){
+      console.log(`Error: Get Users - Request: ${{'Error:':event.target.error}}`)
     }
   }
