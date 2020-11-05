@@ -80,6 +80,94 @@ const HISCORE_PROFILE = [
   "Zulrah",
 ];
 
+const SKILLS = [
+  "Overall",
+  "Attack",
+  "Defence",
+  "Strength",
+  "Hitpoints",
+  "Ranged",
+  "Prayer",
+  "Magic",
+  "Cooking",
+  "Woodcutting",
+  "Fletching",
+  "Fishing",
+  "Firemaking",
+  "Crafting",
+  "Smithing",
+  "Mining",
+  "Herblore",
+  "Agility",
+  "Thieving",
+  "Slayer",
+  "Farming",
+  "Runecrafting",
+  "Hunter",
+  "Construction",
+];
+
+const BOSS_KILLS = [
+  "Abyssal Sire",
+  "Alchemical Hydra",
+  "Barrows Chests",
+  "Bryophyta",
+  "Callisto",
+  "Cerberus",
+  "Chambers of Xeric",
+  "Chambers of Xeric: Challenge Mode",
+  "Chaos Elemental",
+  "Chaos Fanatic",
+  "Commander Zilyana",
+  "Corporeal Beast",
+  "Crazy Archaeologist",
+  "Dagannoth Prime",
+  "Dagannoth Rex",
+  "Dagannoth Supreme",
+  "Deranged Archaeologist",
+  "General Graardor",
+  "Giant Mole",
+  "Grotesque Guardians",
+  "Hespori",
+  "Kalphite Queen",
+  "King Black Dragon",
+  "Kraken",
+  "Kree'Arra",
+  "K'ril Tsutsaroth",
+  "Mimic",
+  "Nightmare",
+  "Obor",
+  "Sarachnis",
+  "Scorpia",
+  "Skotizo",
+  "The Gauntlet",
+  "The Corrupted Gauntlet",
+  "Theatre of Blood",
+  "Thermonuclear Smoke Devil",
+  "TzKal-Zuk",
+  "TzTok-Jad",
+  "Venenatis",
+  "Vet'ion",
+  "Vorkath",
+  "Wintertodt",
+  "Zalcano",
+  "Zulrah",
+];
+
+const MINIGAMES = [
+  "League Points",
+  "Bounty Hunter - Hunter",
+  "Bounty Hunter - Rogue",
+  "Clue Scrolls (all)",
+  "Clue Scrolls (beginner)",
+  "Clue Scrolls (easy)",
+  "Clue Scrolls (medium)",
+  "Clue Scrolls (hard)",
+  "Clue Scrolls (elite)",
+  "Clue Scrolls (master)",
+  "LMS - Rank",
+];
+
 window.onload = function () {
   let skillsTable = document.getElementById("skillTableBody");
   let otherTable = document.getElementById("otherTableBody");
@@ -119,10 +207,6 @@ window.onload = function () {
 
   function parseData(event) {
     event.preventDefault();
-    let x = document.createElement("div");
-    x.setAttribute("class", "loader");
-    x.setAttribute("id", "usernameLoader");
-    usernameFormGroup.appendChild(x);
     let username = profileForm.elements["username"].value;
     document.querySelectorAll("table tbody tr").forEach((row) => {
       row.remove();
@@ -130,14 +214,9 @@ window.onload = function () {
     getData(getAPIUrl(gamemode_dropdown.value, username))
       .then((data) => {
         let results = {};
-        results["hiscores"] = Object.fromEntries(
-          HISCORE_PROFILE.map((_, i) => [
-            HISCORE_PROFILE[i],
-            parseStats(data)[i],
-          ])
-        );
+        results["stats"] = parseStats(data);
         results["username"] = username;
-        results["type"] = "normal";
+        results["type"] = gamemode_dropdown.value;
         results["timestamp"] = Date.now();
         console.log(results);
         document.getElementById("usernameLoader").remove();
@@ -156,7 +235,7 @@ window.onload = function () {
       });
   }
 
-  async function getData(url = "", data = {}) {
+  async function getData(url = "") {
     const response = await fetch(url, {
       method: "GET",
       mode: "cors",
@@ -174,7 +253,10 @@ window.onload = function () {
     return response.text();
   }
 
-  //Used to override ternary expression requirement for throw
+  /**
+   * Used to throw exceptions within ternary operators
+   * @param {string} error
+   */
   function _throw(error) {
     throw error;
   }
@@ -201,6 +283,12 @@ window.onload = function () {
           Object.fromEntries(entry.map((_, i) => [entry[i], stats[i]]))
         );
       });
+
+
+    HISCORE_PROFILE.forEach((skill,index) => {
+      console.log(`${skill} ${index}`)    
+    });
+
     return stats_list;
   }
 
