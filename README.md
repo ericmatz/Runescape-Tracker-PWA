@@ -7,7 +7,7 @@
     - [x]Build Table
     - [ ]Add support for PWA via lighthouse requirements
   ## Extra Features
-    - [ ]Add support for IndexedDB
+    - [IP]Add support for IndexedDB
     - [ ]Graphing feature implementation
     - [ ]Contest Feature
   ## Design
