@@ -1,1 +1,5 @@
+#Visual Studio Code Related
 debug.log
+
+#OSX Related
+.DS_Store

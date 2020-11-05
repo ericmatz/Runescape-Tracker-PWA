@@ -13,7 +13,19 @@
             <div class="form-group" id="usernameFormGroup">
                 <label for="usernameInput">Username:</label>
                 <input name="username" id="usernameInput" type="text" required pattern="[A-Za-z]+">
-                <label for="usernameInput" id="usernameHelper"></label>
+                <select id="gamemodeSelect">
+                    <optgroup label="Standard Gamemodes">
+                        <option>Standard</option>
+                        <option>Ironman</option>
+                        <option>Hardcore Ironman</option>
+                        <option>Ultimate Ironman</option>
+                    </optgroup>
+                    <optgroup label="Temporary Gamemodes">
+                        <option>Deadman Mode</option>
+                        <option>Seasonal</option>
+                        <option>Tournament</option>
+                    </optgroup>
+                </select>
                 <button type="submit">Submit</button>
             </div>
         </form>
