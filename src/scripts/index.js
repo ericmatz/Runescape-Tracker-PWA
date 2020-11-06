@@ -219,14 +219,12 @@ window.onload = function () {
         results["type"] = gamemode_dropdown.value;
         results["timestamp"] = Date.now();
         console.log(results);
-        document.getElementById("usernameLoader").remove();
-        buildTable(results["hiscores"]);
+        buildTable(results["stats"]);
         try {
           addRecord(results);
         } catch (e) {
           console.log(e);
-        } finally {
-        }
+        } finally {}
       })
       .catch((error) => {
         console.log(error);
@@ -269,13 +267,13 @@ window.onload = function () {
       .forEach((element) => {
         let stats = element.split(",");
         let entry = [];
-        stats.length == 3
-          ? (entry = ["Rank", "Level", "Experience"])
-          : stats.length == 2
-          ? (entry = ["Rank", "Participation"])
-          : _throw(
-              `Improper data structure in parseData, length: ${stats.length} \n stats: ${stats}`
-            );
+        stats.length == 3 ?
+          (entry = ["Rank", "Level", "Experience"]) :
+          stats.length == 2 ?
+          (entry = ["Rank", "Participation"]) :
+          _throw(
+            `Improper data structure in parseData, length: ${stats.length} \n stats: ${stats}`
+          );
         stats = stats.map(function (stat) {
           return stat === "-1" ? 0 : parseInt(stat);
         });
@@ -284,24 +282,38 @@ window.onload = function () {
         );
       });
 
+    let list = {
+      skill: {},
+      boss: {},
+      game: {}
+    };
 
-    HISCORE_PROFILE.forEach((skill,index) => {
-      console.log(`${skill} ${index}`)    
+    HISCORE_PROFILE.forEach((row, index) => {
+      if (SKILLS.includes(row)) {
+        list.skill[row] = stats_list[index];
+      } else if (BOSS_KILLS.includes(row)) {
+        list.boss[row] = stats_list[index];
+      } else if (MINIGAMES.includes(row)) {
+        list.game[row] = stats_list[index]
+      } else {
+        throw (`Row: ${row} is not apart of the object`)
+      }
     });
 
-    return stats_list;
+    return list;
   }
 
   function buildTable(data) {
     //for each row i.e. boss/skill | rank | xp
+    
     Object.entries(data).forEach(([key, value]) => {
-      Object.keys(value).length == 3
-        ? (newRow = skillsTable.insertRow(-1))
-        : Object.keys(value).length == 2
-        ? (newRow = otherTable.insertRow(-1))
-        : _throw(
-            `Error: Unknown Data Structure In buildTable: \n Key: ${key} \n Value: ${value}`
-          );
+      Object.keys(value).length == 3 ?
+        (newRow = skillsTable.insertRow(-1)) :
+        Object.keys(value).length == 2 ?
+        (newRow = otherTable.insertRow(-1)) :
+        _throw(
+          `Error: Unknown Data Structure In buildTable: \n Key: ${key} \n Value: ${value}`
+        );
       newRow.insertCell(-1).appendChild(document.createTextNode(key));
       //for each cell in row
       Object.entries(value).forEach(([key, value]) => {
