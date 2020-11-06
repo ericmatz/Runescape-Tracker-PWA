@@ -221,6 +221,7 @@ window.onload = function () {
         console.log(results);
         buildTable(results["stats"]);
         try {
+          document.getElementById("usernameHeader").innerHTML=`<span><img src="src/icons/Ultimate_ironman.png">${username}</span>`
           addRecord(results);
         } catch (e) {
           console.log(e);
@@ -306,38 +307,26 @@ window.onload = function () {
 
   function buildTable(data) {
     //skill,boss,game
-    Object.entries(data).forEach(([key,values]) => {
+    Object.entries(data).forEach(([key, values]) => {
       //skill/activity
-      Object.entries(values).forEach(([entry,values2])=>{
+      Object.entries(values).forEach(([entry, values2]) => {
         //determine which table it falls under
         Object.keys(values2).length == 3
-        ? (newRow = skillsTable.insertRow(-1))
-        : Object.keys(values2).length == 2
-        ? (newRow = otherTable.insertRow(-1))
-        : _throw(
-            `Error: Unknown Data Structure In buildTable: \n Key: ${key} \n Value: ${values2}`
-          );
-        newRow.insertCell(-1).appendChild(document.createTextNode(entry));
+          ? (newRow = skillsTable.insertRow(-1))
+          : Object.keys(values2).length == 2
+          ? (newRow = otherTable.insertRow(-1))
+          : _throw(
+              `Error: Unknown Data Structure In buildTable: \n Key: ${key} \n Value: ${values2}`
+            );
+            newRow.className = entry;
+            newRow.insertCell(-1).outerHTML = `<th scope="row">${entry}</th>`;
+
+        //newRow.insertCell(-1).appendChild(document.createTextNode(entry));
         //rank:x,level/participation/experience
-        Object.entries(values2).forEach(([col,value]) =>{
+        Object.entries(values2).forEach(([col, value]) => {
           newRow.insertCell(-1).appendChild(document.createTextNode(value));
         });
       });
     });
-
-    // Object.entries(data).forEach(([key, value]) => {
-    //   Object.keys(value).length == 3
-    //     ? (newRow = skillsTable.insertRow(-1))
-    //     : Object.keys(value).length == 2
-    //     ? (newRow = otherTable.insertRow(-1))
-    //     : _throw(
-    //         `Error: Unknown Data Structure In buildTable: \n Key: ${key} \n Value: ${value}`
-    //       );
-    //   newRow.insertCell(-1).appendChild(document.createTextNode(key));
-    //   //for each cell in row
-    //   Object.entries(value).forEach(([key, value]) => {
-    //     newRow.insertCell(-1).appendChild(document.createTextNode(value));
-    //   });
-    // });
   }
 };

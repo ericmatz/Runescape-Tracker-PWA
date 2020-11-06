@@ -1,13 +1,30 @@
-.loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 2s linear infinite;
+table {
+  table-layout: fixed;
+  text-align: center;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+tr{
+  border-collapse: collapse;
+}
+
+.Attack {
+  background-color: darkred;
+  color: gold;
+}
+
+.Defence {
+  background-color: lightskyblue;
+  color: white;
+}
+
+h2{
+  text-align: center;
+}
+
+#tablesDiv{
+  padding: 0%;
+  display:grid;
+  grid-auto-columns: auto;
+  text-align: center;
+  background-color: lime;
 }

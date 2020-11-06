@@ -31,46 +31,30 @@
         </form>
     </head>
     <body>
-        <div style="display: flex">
+        <h2 id="usernameHeader"></h2>
+        <div id="tablesDiv">
             <table id="skillTable">
                 <thead>
+                    <caption>Skills</caption>
                     <tr>
-                        <th>Skills</th>
-                    </tr>
-                    <tr>
-                        <th>Skill</th>
-                        <th>Rank</th>
-                        <th>Level</th>
-                        <th>Experience</th>
+                        <th scope="col">Skill</th>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Experience</th>
                     </tr>
                 </thead>
                 <tbody id="skillTableBody"></tbody>
             </table>
             <table id="otherTable">
                 <thead>
+                    <caption>Minigames / Bosses</caption>
                     <tr>
-                        <th>Minigames / Bosses</th>
-                    </tr>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Participation</th>
+                        <th scope="col">Activity</th>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Participation</th>
                     </tr>
                 </thead>
                 <tbody id="otherTableBody"></tbody>
-            </table>
-            <table id="userTable">
-                <thead>
-                    <tr>
-                        <th>Tracked Users</th>
-                    </tr>
-                    <tr>
-                        <th>Actions</th>
-                        <th>User</th>
-                    </tr>
-                </thead>
-                <tbody id="userTableBody">
-
-                </tbody>
             </table>
         </div>
     </body>
