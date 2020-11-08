@@ -154,7 +154,7 @@ const BOSS_KILLS = [
   "Zulrah",
 ];
 
-const MINIGAMES = [
+const ACTIVITIES = [
   "League Points",
   "Bounty Hunter - Hunter",
   "Bounty Hunter - Rogue",
@@ -172,7 +172,6 @@ window.onload = function () {
   let skillsTable = document.getElementById("skillTableBody");
   let otherTable = document.getElementById("otherTableBody");
   let profileForm = document.getElementById("profileForm");
-  let usernameFormGroup = document.getElementById("usernameFormGroup");
   let userNameHelper = document.getElementById("usernameHelper");
   let gamemode_dropdown = document.getElementById("gamemodeSelect");
 
@@ -208,7 +207,10 @@ window.onload = function () {
   function parseData(event) {
     event.preventDefault();
     let username = profileForm.elements["username"].value;
-    document.querySelectorAll("table tbody tr").forEach((row) => {
+    skillsTable.querySelectorAll("tbody tr").forEach((row) => {
+      row.remove();
+    });
+    otherTable.querySelectorAll("tbody tr").forEach((row) => {
       row.remove();
     });
     getData(getAPIUrl(gamemode_dropdown.value, username))
@@ -246,7 +248,6 @@ window.onload = function () {
     });
 
     if (response.status !== 200) {
-      userNameHelper.classList.add("invalid");
       throw `Status ${(await response).status} returned`;
     }
 
@@ -287,7 +288,7 @@ window.onload = function () {
     let list = {
       skill: {},
       boss: {},
-      game: {},
+      activity: {},
     };
 
     HISCORE_PROFILE.forEach((row, index) => {
@@ -295,10 +296,10 @@ window.onload = function () {
         list.skill[row] = stats_list[index];
       } else if (BOSS_KILLS.includes(row)) {
         list.boss[row] = stats_list[index];
-      } else if (MINIGAMES.includes(row)) {
-        list.game[row] = stats_list[index];
+      } else if (ACTIVITIES.includes(row)) {
+        list.activity[row] = stats_list[index];
       } else {
-        throw `Row: ${row} is not apart of the object`;
+        throw `Row: ${row} is not apart of the object with the value of ${stats_list[index]}`;
       }
     });
 

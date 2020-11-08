@@ -1,0 +1,114 @@
+.Attack {
+  background-color: darkred;
+  color: gold;
+}
+
+.Defence {
+  background-color: lightskyblue;
+  color: white;
+}
+
+.Strength {
+  background-color: green;
+  color: red;
+}
+
+.Hitpoints {
+  background-color: white;
+  color: red;
+}
+
+.Ranged {
+  background-color: green;
+  color: orange;
+}
+
+.Prayer {
+  background-color: white;
+  color: yellow;
+}
+
+.Magic {
+  background-color: beige;
+  color: blue;
+}
+
+.Cooking {
+  background-color: purple;
+  color: red;
+}
+
+.Woodcutting {
+  background-color: burlywood;
+  color: green;
+}
+
+.Fletching {
+  background-color: teal;
+  color: gold;
+}
+
+.Fishing {
+  background-color: lightskyblue;
+  color: gold;
+}
+
+.Firemaking {
+  background-color: orange;
+  color: gold;
+}
+
+.Crafting {
+  background-color: tan;
+  color: gold;
+}
+
+.Smithing {
+  background-color: grey;
+  color: gold;
+}
+
+.Mining {
+  background-color: gray;
+  color: skyblue;
+}
+
+.Herblore {
+  background-color: darkgreen;
+  color: gold;
+}
+
+.Agility {
+  background-color: darkblue;
+  color: red;
+}
+
+.Thieving {
+  background-color: purple;
+  color: black;
+}
+
+.Slayer {
+  background-color: black;
+  color: red;
+}
+
+.Farming {
+  background-color: green;
+  color: lightgreen;
+}
+
+.Runecrafting {
+  background-color: beige;
+  color: gold;
+}
+
+.Hunter {
+  background-color: tan;
+  color: black;
+}
+
+.Construction {
+  background-color: beige;
+  color: gold;
+}
