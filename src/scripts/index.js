@@ -223,7 +223,7 @@ window.onload = function () {
         console.log(results);
         buildTable(results["stats"]);
         try {
-          document.getElementById("usernameHeader").innerHTML=`<span><img src="src/icons/Ultimate_ironman.png">${username}</span>`
+          document.getElementById("usernameHeader").innerHTML=`<span><img class="img-fluid" src="src/icons/Ultimate_ironman.png">${username}</span>`
           addRecord(results);
         } catch (e) {
           console.log(e);
