@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+
+<head>
+    <!-- Page Details -->
+    <meta charset="utf-8">
+    <title>Hiscores Lookup</title>
+    <meta name="author" content="Eric Matz">
+    <meta name="description" content="">
+
+    <!-- Scripts -->
+    <script src="src/scripts/index.js" async></script>
+    <script src="src/scripts/database.js"></script>
+
+    <!-- Styling -->
+    <link rel="stylesheet" href="src/css/layout.css">
+    <link rel="stylesheet" href="src/css/lookup.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li id="home"><a href="Index.html">Home</a></li>
+                <li><a href="Lookup.html">Lookup</a></li>
+                <li><a href="Records.html">Records</a></li>
+                <li><a href="Records.html">Analyze</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <br>
+        <form id="profileForm">
+            <div id="usernameFormGroup">
+                <input name="username" id="usernameInput" type="text" required pattern="[A-Za-z]+">
+                <select id="gamemodeSelect" class="form-control">
+                    <optgroup label="Standard Gamemodes">
+                        <option>Standard</option>
+                        <option>Ironman</option>
+                        <option>Hardcore Ironman</option>
+                        <option>Ultimate Ironman</option>
+                    </optgroup>
+                    <optgroup label="Temporary Gamemodes">
+                        <option>Deadman Mode</option>
+                        <option>Seasonal</option>
+                        <option>Tournament</option>
+                    </optgroup>
+                </select>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+        <h2 id="usernameHeader"></h2>
+        <div id="tables">
+            <table id="skillTable" class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Skill</th>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Experience</th>
+                    </tr>
+                </thead>
+                <tbody id="skillTableBody"></tbody>
+            </table>
+            <table id="otherTable" class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Activity</th>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Participation</th>
+                    </tr>
+                </thead>
+                <tbody id="otherTableBody"></tbody>
+            </table>
+        </div>
+    </main>
+    <footer>
+        <ul>
+            <li><a href="github.com">Github</a></li>
+            <li><a href="linkedin.com">Linkedin</a></li>
+            <li><a href="Facebook.com">Facebook</a></li>
+
+        </ul>
+        <p>©
+            <script>
+                document.write(new Date().getFullYear());
+            </script>
+        </p>
+    </footer>
+</body></html>

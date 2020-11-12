@@ -11,7 +11,7 @@
     - [ ]Graphing feature implementation
     - [ ]Contest Feature
   ## Design
-    - [ ]Modern UI From Scratch
+    - [IP]Modern UI From Scratch
     - [ ]Dark & Light Mode
     - [ ]UI Scaling
     
