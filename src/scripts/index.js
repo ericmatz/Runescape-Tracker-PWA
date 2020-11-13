@@ -168,7 +168,30 @@ const ACTIVITIES = [
   "LMS - Rank",
 ];
 
-window.onload = function () {
+const DATABASE_NAME = "runescape_tracker_pwa";
+
+/**
+ * 
+ * @param {IDBDatabase} database 
+ */
+function upgradeDB(database){
+  return new Promise(function (resolve, reject) {
+        //Create Table
+        if (!database.objectStoreNames.contains('records')) {
+          let records_table = database.createObjectStore('records', {
+            autoIncrement: true
+          })
+          //objectStore.createIndex(indexName, keyPath, { unique: false });
+          records_table.createIndex('username', 'username', {unique: false});
+          records_table.createIndex('type', 'type', {unique: false});
+          resolve("Upgrade Successful.");
+        }else{
+          reject("ObjectStore already exists?")
+        }
+  });
+}
+
+window.onload = async function () {
   let skillsTable = document.getElementById("skillTableBody");
   let otherTable = document.getElementById("otherTableBody");
   let profileForm = document.getElementById("profileForm");
@@ -176,6 +199,12 @@ window.onload = function () {
   let gamemode_dropdown = document.getElementById("gamemodeSelect");
 
   profileForm.addEventListener("submit", parseData);
+
+  var database = await openDB(DATABASE_NAME,1,upgradeDB)
+    .then((result) => {return result})
+    .catch((result)=>{console.log(result)});
+
+  console.log(x)
 
   /**
    * Determines the Hiscores API URL to use depending on selected gamemode
