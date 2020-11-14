@@ -204,7 +204,7 @@ window.onload = async function () {
     .then((result) => {return result})
     .catch((result)=>{console.log(result)});
 
-  console.log(x)
+  console.log(database)
 
   /**
    * Determines the Hiscores API URL to use depending on selected gamemode
@@ -247,13 +247,16 @@ window.onload = async function () {
         let results = {};
         results["stats"] = parseStats(data);
         results["username"] = username;
-        results["type"] = gamemode_dropdown.value;
+        //results["type"] = gamemode_dropdown.value;
+        results["type"] = "Ironman"
         results["timestamp"] = Date.now();
         console.log(results);
         buildTable(results["stats"]);
         try {
           document.getElementById("usernameHeader").innerHTML=`<span><img class="img-fluid" src="src/icons/Ultimate_ironman.png">${username}</span>`
-          addRecord(results);
+          addRecords(database, 'records', [results])
+            .then((results) => {console.log(results)})
+            .catch((results)=> {throw results});
         } catch (e) {
           console.log(e);
         } finally {
