@@ -29,9 +29,7 @@ function parseDate(UTC) {
 }
 
 
-function createRecordEntry(value,id) {
-
-    console.log(value)
+function createRecordEntry(value) {
 
     let div = "";
 
@@ -39,8 +37,8 @@ function createRecordEntry(value,id) {
         div += `
         <div class="recordEntry">
             <div class="button-group">
-                <button data-id=${value.id}>View</button>
-                <button data-id=${value.id}>Delete</button>
+                <button data-id=${value.id} class="btnView">View</button>
+                <button data-id=${value.id} class="btnDelete">Delete</button>
             </div>
             <div>${parseDate(parseInt(key))}</div>
         </div>
@@ -50,9 +48,7 @@ function createRecordEntry(value,id) {
     return div;
 }
 
-function createTypeEntry(value,id) {
-
-    console.log(value)
+function createTypeEntry(value) {
 
     let div = "";
 
@@ -60,7 +56,7 @@ function createTypeEntry(value,id) {
         div += `
         <div class="typeEntry">
         <h3>${key}</h3>
-        ${createRecordEntry(value,id)}
+        ${createRecordEntry(value)}
         </div>
     `
     })
@@ -68,12 +64,12 @@ function createTypeEntry(value,id) {
     return div;
 }
 
-function createElement(username, value, id) {
+function createElement(username, value) {
     let div = document.createElement("div");
     div.className = "collection"
     div.innerHTML = `
             <h2>${username}</h2>
-            ${createTypeEntry(value,id)}
+            ${createTypeEntry(value)}
 `
     return div;
 }
@@ -93,6 +89,17 @@ function buildResultSet(data) {
     return list;
 }
 
+function deleteRecord(event){
+    openDB(DATABASE_NAME,1,upgradeDB)
+        .then(database => {
+            deleteRecords(database,'records','id',parseInt(event.target.dataset.id))
+            .then(result => {console.log(result)})
+            .catch(result => {throw result});
+        })
+        .catch(result => {throw result})
+
+}
+
 window.onload = function () {
     openDB(DATABASE_NAME, 1, upgradeDB)
         .then((database) => {
@@ -100,10 +107,21 @@ window.onload = function () {
                 .then((results) => {
                     let resultSet = buildResultSet(results)
                     Object.entries(resultSet).forEach(([key, value]) => {
-                        console.log("now looking at",key,value)
-                        let ele = createElement(key, value,value.id);
-                        document.getElementById("container").appendChild(ele);
-                    })
+                        document.getElementById("container").appendChild(createElement(key, value));
+                    });
+
+                    let deleteButtons = document.getElementsByClassName("btnDelete");
+
+                    Array.from(deleteButtons).forEach(button => {
+                        button.addEventListener("click",deleteRecord)
+                    });
+
+                    let viewButtons = document.getElementsByClassName("btnView");
+
+                    Array.from(viewButtons).forEach(button => {
+
+                    });
+
                 })
                 .catch((result) => {
                     throw result;

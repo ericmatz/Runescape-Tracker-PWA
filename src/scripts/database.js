@@ -80,7 +80,7 @@ function addRecords(database, storeName, data) {
  */
 function deleteRecords(database, storeName, indexName, key) {
     return new Promise(function (resolve, reject) {
-        let transaction = database.transaction("records", "readwrite");
+        let transaction = database.transaction(storeName, "readwrite");
 
         transaction.oncomplete = function () {
             console.log("Delete Transaction Successful.");
@@ -111,11 +111,10 @@ function deleteRecords(database, storeName, indexName, key) {
                 }
                 cursor.continue();
             }
-            console.log("Delete Request(s) Successful")
         }
 
         objectStoreCursor.onerror = function (event) {
-            resolve(`Error: deleteRecords - Cursor Failed - Supplied Data: {${database},${storeName},${indexName},${key} Code: ${event.target.errorCode} Error: ${event.target.error}`)
+            reject(`Error: deleteRecords - Cursor Failed - Supplied Data: {${database},${storeName},${indexName},${key} Code: ${event.target.errorCode} Error: ${event.target.error}`)
         }
     });
 }

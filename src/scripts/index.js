@@ -179,9 +179,9 @@ function upgradeDB(database){
         //Create Table
         if (!database.objectStoreNames.contains('records')) {
           let records_table = database.createObjectStore('records', { keyPath: "id", autoIncrement:true })
-          //objectStore.createIndex(indexName, keyPath, { unique: false });
           records_table.createIndex('username', 'username', {unique: false});
           records_table.createIndex('type', 'type', {unique: false});
+          records_table.createIndex('id', 'id', {unique: true});
           resolve("Upgrade Successful.");
         }else{
           reject("ObjectStore already exists?")
