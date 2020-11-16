@@ -1,18 +1,17 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-}
-
-.entry {
+.entry{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-around;
+    align-items: baseline;
 }
 
 .button-group{
+    background-color: royalblue;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    justify-content: end;
 }
+
+button{
+margin: 1px;}

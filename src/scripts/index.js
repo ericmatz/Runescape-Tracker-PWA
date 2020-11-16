@@ -247,8 +247,7 @@ window.onload = async function () {
         let results = {};
         results["stats"] = parseStats(data);
         results["username"] = username;
-        //results["type"] = gamemode_dropdown.value;
-        results["type"] = "Ironman"
+        results["type"] = gamemode_dropdown.value;
         results["timestamp"] = Date.now();
         console.log(results);
         buildTable(results["stats"]);
