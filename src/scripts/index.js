@@ -178,9 +178,7 @@ function upgradeDB(database){
   return new Promise(function (resolve, reject) {
         //Create Table
         if (!database.objectStoreNames.contains('records')) {
-          let records_table = database.createObjectStore('records', {
-            autoIncrement: true
-          })
+          let records_table = database.createObjectStore('records', { keyPath: "id", autoIncrement:true })
           //objectStore.createIndex(indexName, keyPath, { unique: false });
           records_table.createIndex('username', 'username', {unique: false});
           records_table.createIndex('type', 'type', {unique: false});
@@ -269,20 +267,22 @@ window.onload = async function () {
   }
 
   async function getData(url = "") {
-    const response = await fetch(url, {
+    const response = fetch(url, {
       method: "GET",
       mode: "cors",
       cache: "no-cache",
       headers: {
         "Content-Type": "text/html",
       },
-    });
+    }).then(response =>{
+      if (response.status !== 200) {
+        throw `Status ${(response).status} returned`;
+      }
+      return response.text();
 
-    if (response.status !== 200) {
-      throw `Status ${(await response).status} returned`;
-    }
+    }).catch(reason =>{throw reason});
 
-    return response.text();
+    return await response;
   }
 
   /**

@@ -9,6 +9,7 @@ function upgradeDB(database) {
         //Create Table
         if (!database.objectStoreNames.contains("records")) {
             let records_table = database.createObjectStore("records", {
+                keyPath: 'PK',
                 autoIncrement: true,
             });
             //objectStore.createIndex(indexName, keyPath, { unique: false });
@@ -28,18 +29,18 @@ function parseDate(UTC) {
 }
 
 
-function createRecordEntry(value) {
+function createRecordEntry(value,id) {
 
     console.log(value)
 
     let div = "";
 
-    Object.entries(value).forEach(([key]) => {
+    Object.entries(value).forEach(([key,value]) => {
         div += `
         <div class="recordEntry">
             <div class="button-group">
-                <button>View</button>
-                <button>Delete</button>
+                <button data-id=${value.id}>View</button>
+                <button data-id=${value.id}>Delete</button>
             </div>
             <div>${parseDate(parseInt(key))}</div>
         </div>
@@ -49,7 +50,7 @@ function createRecordEntry(value) {
     return div;
 }
 
-function createTypeEntry(value) {
+function createTypeEntry(value,id) {
 
     console.log(value)
 
@@ -59,7 +60,7 @@ function createTypeEntry(value) {
         div += `
         <div class="typeEntry">
         <h3>${key}</h3>
-        ${createRecordEntry(value)}
+        ${createRecordEntry(value,id)}
         </div>
     `
     })
@@ -67,13 +68,12 @@ function createTypeEntry(value) {
     return div;
 }
 
-function createElement(username, value) {
-    console.log(username, value)
+function createElement(username, value, id) {
     let div = document.createElement("div");
     div.className = "collection"
     div.innerHTML = `
             <h2>${username}</h2>
-            ${createTypeEntry(value)}
+            ${createTypeEntry(value,id)}
 `
     return div;
 }
@@ -84,9 +84,9 @@ function buildResultSet(data) {
 
     data.forEach(row => {
         if (list.hasOwnProperty(row.username)) {
-            list[row.username][row.type] = { ...list[row.username][row.type], [row.timestamp]: { 'stats': row.stats } };
+            list[row.username][row.type] = { ...list[row.username][row.type], [row.timestamp]: { 'stats': row.stats, 'id':row.id } };
         } else {
-            list = { ...list, [row.username]: { [row.type]: { [row.timestamp]: { 'stats': row.stats } } } };
+            list = { ...list, [row.username]: { [row.type]: { [row.timestamp]: { 'stats': row.stats, 'id':row.id} } } };
         }
     });
 
@@ -100,8 +100,8 @@ window.onload = function () {
                 .then((results) => {
                     let resultSet = buildResultSet(results)
                     Object.entries(resultSet).forEach(([key, value]) => {
-                        let ele = createElement(key, value);
-                        console.log(ele)
+                        console.log("now looking at",key,value)
+                        let ele = createElement(key, value,value.id);
                         document.getElementById("container").appendChild(ele);
                     })
                 })
