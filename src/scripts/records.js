@@ -36,7 +36,7 @@ function createRecordEntry(value) {
 
     Object.entries(value).forEach(([key]) => {
         div += `
-        <div class="entry">
+        <div class="recordEntry">
             <div class="button-group">
                 <button>View</button>
                 <button>Delete</button>
@@ -57,7 +57,7 @@ function createTypeEntry(value) {
 
     Object.entries(value).forEach(([key, value]) => {
         div += `
-        <div>
+        <div class="typeEntry">
         <h3>${key}</h3>
         ${createRecordEntry(value)}
         </div>
@@ -70,7 +70,7 @@ function createTypeEntry(value) {
 function createElement(username, value) {
     console.log(username, value)
     let div = document.createElement("div");
-    div.className = "entry"
+    div.className = "collection"
     div.innerHTML = `
             <h2>${username}</h2>
             ${createTypeEntry(value)}
