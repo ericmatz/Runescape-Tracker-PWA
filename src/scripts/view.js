@@ -19,8 +19,15 @@ function upgradeDB(database) {
     });
 }
 
+function parseDate(UTC) {
+    console.log()
+    let date = new Date(UTC);
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+}
+
+
 window.onload = function () {
-    let skillsTable = document.getElementById("skillTable"), otherTable = document.getElementById("otherTable"), usernameHeader = document.getElementById("usernameHeader");
+    let skillsTable = document.getElementById("skillTable"), otherTable = document.getElementById("otherTable"), usernameHeader = document.getElementById("usernameHeader"), recordTimestamp = document.getElementById("recordTimestamp"), recordID = document.getElementById("recordID");
 
     const params = new URLSearchParams(window.location.search)
     console.log(params.get('id'))
@@ -31,6 +38,8 @@ window.onload = function () {
                 .then((results) => {
                     console.log(results)
                     usernameHeader.innerHTML = results[0].username
+                    recordTimestamp.innerHTML = `Date: ${parseDate(results[0].timestamp)}`
+                    recordID.innerHTML = `ID: ${results[0].id}`
                     buildTable(results[0].stats)
                 })
                 .catch((result) => {

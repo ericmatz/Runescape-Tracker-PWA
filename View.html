@@ -15,7 +15,7 @@
 
     <!-- Styling -->
     <link rel="stylesheet" href="src/css/layout.css">
-    <link rel="stylesheet" href="src/css/records.css">
+    <link rel="stylesheet" href="src/css/view.css">
 </head>
 
 <body>
@@ -31,7 +31,13 @@
     </header>
     <main>
         <div id="container" class="container">
-            <h2 id="usernameHeader"></h2>
+            <div id="recordHeader">
+                <h2 id="usernameHeader"></h2>
+                <ul id="recordData">
+                    <li id="recordID"></li>
+                    <li id="recordTimestamp"></li>
+                </ul>
+            </div>
             <div id="tables">
                 <table id="skillTable" class="table">
                     <thead>
