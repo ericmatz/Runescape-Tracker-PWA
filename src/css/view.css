@@ -1,3 +1,4 @@
+/* To Be Consolidated with lookup */
 #tables {
     display: flex;
     flex-direction: row;
@@ -6,16 +7,38 @@
     align-content: center;
 }
 
-#usernameHeader {
-    display: flex;
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: center;
-}
-
 table {
     table-layout: fixed;
     text-align: center;
     width: auto;
 }
 
+/* Actual Unique CSS */
+
+#recordHeader {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#recordHeader ul,h2{
+    padding: 0;
+    margin: 0;
+}
+
+#recordData{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style: none;
+    justify-content: center;
+}
+
+#recordData li {
+    padding-right: 16px;
+}
+
+#usernameHeader {
+    text-align: center;
+}
