@@ -1,210 +1,17 @@
-import {openDB, addRecords} from "./libraries/IndexedDB_Wrapper_Promises/database.js"
-
-const HISCORE_PROFILE = [
-  "Overall",
-  "Attack",
-  "Defence",
-  "Strength",
-  "Hitpoints",
-  "Ranged",
-  "Prayer",
-  "Magic",
-  "Cooking",
-  "Woodcutting",
-  "Fletching",
-  "Fishing",
-  "Firemaking",
-  "Crafting",
-  "Smithing",
-  "Mining",
-  "Herblore",
-  "Agility",
-  "Thieving",
-  "Slayer",
-  "Farming",
-  "Runecrafting",
-  "Hunter",
-  "Construction",
-  "League Points",
-  "Bounty Hunter - Hunter",
-  "Bounty Hunter - Rogue",
-  "Clue Scrolls (all)",
-  "Clue Scrolls (beginner)",
-  "Clue Scrolls (easy)",
-  "Clue Scrolls (medium)",
-  "Clue Scrolls (hard)",
-  "Clue Scrolls (elite)",
-  "Clue Scrolls (master)",
-  "LMS - Rank",
-  "Abyssal Sire",
-  "Alchemical Hydra",
-  "Barrows Chests",
-  "Bryophyta",
-  "Callisto",
-  "Cerberus",
-  "Chambers of Xeric",
-  "Chambers of Xeric: Challenge Mode",
-  "Chaos Elemental",
-  "Chaos Fanatic",
-  "Commander Zilyana",
-  "Corporeal Beast",
-  "Crazy Archaeologist",
-  "Dagannoth Prime",
-  "Dagannoth Rex",
-  "Dagannoth Supreme",
-  "Deranged Archaeologist",
-  "General Graardor",
-  "Giant Mole",
-  "Grotesque Guardians",
-  "Hespori",
-  "Kalphite Queen",
-  "King Black Dragon",
-  "Kraken",
-  "Kree'Arra",
-  "K'ril Tsutsaroth",
-  "Mimic",
-  "Nightmare",
-  "Obor",
-  "Sarachnis",
-  "Scorpia",
-  "Skotizo",
-  "The Gauntlet",
-  "The Corrupted Gauntlet",
-  "Theatre of Blood",
-  "Thermonuclear Smoke Devil",
-  "TzKal-Zuk",
-  "TzTok-Jad",
-  "Venenatis",
-  "Vet'ion",
-  "Vorkath",
-  "Wintertodt",
-  "Zalcano",
-  "Zulrah",
-];
-
-const SKILLS = [
-  "Overall",
-  "Attack",
-  "Defence",
-  "Strength",
-  "Hitpoints",
-  "Ranged",
-  "Prayer",
-  "Magic",
-  "Cooking",
-  "Woodcutting",
-  "Fletching",
-  "Fishing",
-  "Firemaking",
-  "Crafting",
-  "Smithing",
-  "Mining",
-  "Herblore",
-  "Agility",
-  "Thieving",
-  "Slayer",
-  "Farming",
-  "Runecrafting",
-  "Hunter",
-  "Construction",
-];
-
-const BOSS_KILLS = [
-  "Abyssal Sire",
-  "Alchemical Hydra",
-  "Barrows Chests",
-  "Bryophyta",
-  "Callisto",
-  "Cerberus",
-  "Chambers of Xeric",
-  "Chambers of Xeric: Challenge Mode",
-  "Chaos Elemental",
-  "Chaos Fanatic",
-  "Commander Zilyana",
-  "Corporeal Beast",
-  "Crazy Archaeologist",
-  "Dagannoth Prime",
-  "Dagannoth Rex",
-  "Dagannoth Supreme",
-  "Deranged Archaeologist",
-  "General Graardor",
-  "Giant Mole",
-  "Grotesque Guardians",
-  "Hespori",
-  "Kalphite Queen",
-  "King Black Dragon",
-  "Kraken",
-  "Kree'Arra",
-  "K'ril Tsutsaroth",
-  "Mimic",
-  "Nightmare",
-  "Obor",
-  "Sarachnis",
-  "Scorpia",
-  "Skotizo",
-  "The Gauntlet",
-  "The Corrupted Gauntlet",
-  "Theatre of Blood",
-  "Thermonuclear Smoke Devil",
-  "TzKal-Zuk",
-  "TzTok-Jad",
-  "Venenatis",
-  "Vet'ion",
-  "Vorkath",
-  "Wintertodt",
-  "Zalcano",
-  "Zulrah",
-];
-
-const ACTIVITIES = [
-  "League Points",
-  "Bounty Hunter - Hunter",
-  "Bounty Hunter - Rogue",
-  "Clue Scrolls (all)",
-  "Clue Scrolls (beginner)",
-  "Clue Scrolls (easy)",
-  "Clue Scrolls (medium)",
-  "Clue Scrolls (hard)",
-  "Clue Scrolls (elite)",
-  "Clue Scrolls (master)",
-  "LMS - Rank",
-];
-
-const DATABASE_NAME = "runescape_tracker_pwa";
-
-/**
- * 
- * @param {IDBDatabase} database 
- */
-function upgradeDB(database){
-  return new Promise(function (resolve, reject) {
-        //Create Table
-        if (!database.objectStoreNames.contains('records')) {
-          let records_table = database.createObjectStore('records', { keyPath: "id", autoIncrement:true })
-          records_table.createIndex('username', 'username', {unique: false});
-          records_table.createIndex('type', 'type', {unique: false});
-          records_table.createIndex('id', 'id', {unique: true});
-          resolve("Upgrade Successful.");
-        }else{
-          reject("ObjectStore already exists?")
-        }
-  });
-}
+import { openDB, addRecords } from "./libraries/IndexedDB_Wrapper_Promises/database.js"
+import { DATABASE_NAME, upgradeDB, SKILLS, HISCORE_PROFILE, BOSS_KILLS, ACTIVITIES } from "./utilities.js"
 
 window.onload = async function () {
   let skillsTable = document.getElementById("skillTableBody");
   let otherTable = document.getElementById("otherTableBody");
   let profileForm = document.getElementById("profileForm");
-  let userNameHelper = document.getElementById("usernameHelper");
   let gamemode_dropdown = document.getElementById("gamemodeSelect");
 
   profileForm.addEventListener("submit", parseData);
 
-  var database = await openDB(DATABASE_NAME,1,upgradeDB)
-    .then((result) => {return result})
-    .catch((result)=>{console.log(result)});
-
-  console.log(database)
+  var database = await openDB(DATABASE_NAME, 1, upgradeDB)
+    .then((result) => { return result })
+    .catch((result) => { throw result });
 
   /**
    * Determines the Hiscores API URL to use depending on selected gamemode
@@ -252,17 +59,17 @@ window.onload = async function () {
         console.log(results);
         buildTable(results["stats"]);
         try {
-          document.getElementById("usernameHeader").innerHTML=`<span><img class="img-fluid" src="src/icons/Ultimate_ironman.png">${username}</span>`
+          document.getElementById("usernameHeader").innerHTML = `<span><img class="img-fluid" src="src/icons/Ultimate_ironman.png">${username}</span>`
           addRecords(database, 'records', [results])
-            .then((results) => {console.log(results)})
-            .catch((results)=> {throw results});
+            .then((results) => { console.log(results) })
+            .catch((results) => { throw results });
         } catch (e) {
-          throw(e)
+          throw (e)
         } finally {
         }
       })
       .catch((error) => {
-        throw(error)
+        throw (error)
       });
   }
 
@@ -274,13 +81,13 @@ window.onload = async function () {
       headers: {
         "Content-Type": "text/html",
       },
-    }).then(response =>{
+    }).then(response => {
       if (response.status !== 200) {
         throw `Status ${(response).status} returned`;
       }
       return response.text();
 
-    }).catch(reason =>{throw reason});
+    }).catch(reason => { throw reason });
 
     return await response;
   }
@@ -304,8 +111,8 @@ window.onload = async function () {
         stats.length == 3
           ? (entry = ["Rank", "Level", "Experience"])
           : stats.length == 2
-          ? (entry = ["Rank", "Participation"])
-          : _throw(
+            ? (entry = ["Rank", "Participation"])
+            : _throw(
               `Improper data structure in parseData, length: ${stats.length} \n stats: ${stats}`
             );
         stats = stats.map(function (stat) {
@@ -347,12 +154,12 @@ window.onload = async function () {
         Object.keys(values2).length == 3
           ? (newRow = skillsTable.insertRow(-1))
           : Object.keys(values2).length == 2
-          ? (newRow = otherTable.insertRow(-1))
-          : _throw(
+            ? (newRow = otherTable.insertRow(-1))
+            : _throw(
               `Error: Unknown Data Structure In buildTable: \n Key: ${key} \n Value: ${values2}`
             );
-            newRow.className = entry;
-            newRow.insertCell(-1).outerHTML = `<th scope="row">${entry}</th>`;
+        newRow.className = entry;
+        newRow.insertCell(-1).outerHTML = `<th scope="row">${entry}</th>`;
 
         //newRow.insertCell(-1).appendChild(document.createTextNode(entry));
         //rank:x,level/participation/experience
