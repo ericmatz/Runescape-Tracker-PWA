@@ -1,0 +1,3 @@
+[submodule "src/scripts/libraries/IndexedDB_Wrapper_Promises"]
+	path = src/scripts/libraries/IndexedDB_Wrapper_Promises
+	url = https://github.com/ericmatz/IndexedDB_Wrapper_Promises
