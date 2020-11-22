@@ -1,3 +1,5 @@
+import {openDB, addRecords} from "./libraries/IndexedDB_Wrapper_Promises/database.js"
+
 const HISCORE_PROFILE = [
   "Overall",
   "Attack",
@@ -255,14 +257,12 @@ window.onload = async function () {
             .then((results) => {console.log(results)})
             .catch((results)=> {throw results});
         } catch (e) {
-          console.log(e);
+          throw(e)
         } finally {
         }
       })
       .catch((error) => {
-        console.log(error);
-        userNameHelper.classList.add("invalid");
-        userNameHelper.innerHTML = "Invalid Username";
+        throw(error)
       });
   }
 
@@ -342,6 +342,7 @@ window.onload = async function () {
     Object.entries(data).forEach(([key, values]) => {
       //skill/activity
       Object.entries(values).forEach(([entry, values2]) => {
+        let newRow;
         //determine which table it falls under
         Object.keys(values2).length == 3
           ? (newRow = skillsTable.insertRow(-1))

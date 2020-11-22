@@ -1,5 +1,8 @@
+import { openDB, getRecordsOnIndex } from "./libraries/IndexedDB_Wrapper_Promises/database.js"
+
 const DATABASE_NAME = "runescape_tracker_pwa";
 const OBJECTSTORE = "records";
+
 /**
  * 
  * @param {IDBDatabase} database 
