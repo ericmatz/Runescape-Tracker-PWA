@@ -1,26 +1,23 @@
 const DATABASE_NAME = "runescape_tracker_pwa";
 const OBJECTSTORE = "records";
 /**
- *
- * @param {IDBDatabase} database
+ * 
+ * @param {IDBDatabase} database 
  */
-function upgradeDB(database) {
+function upgradeDB(database){
     return new Promise(function (resolve, reject) {
-        //Create Table
-        if (!database.objectStoreNames.contains("records")) {
-            let records_table = database.createObjectStore("records", {
-                keyPath: 'PK',
-                autoIncrement: true,
-            });
-            //objectStore.createIndex(indexName, keyPath, { unique: false });
-            records_table.createIndex("username", "username", { unique: false });
-            records_table.createIndex("type", "type", { unique: false });
+          //Create Table
+          if (!database.objectStoreNames.contains('records')) {
+            let records_table = database.createObjectStore('records', { keyPath: "id", autoIncrement:true })
+            records_table.createIndex('username', 'username', {unique: false});
+            records_table.createIndex('type', 'type', {unique: false});
+            records_table.createIndex('id', 'id', {unique: true});
             resolve("Upgrade Successful.");
-        } else {
-            reject("ObjectStore already exists?");
-        }
+          }else{
+            reject("ObjectStore already exists?")
+          }
     });
-}
+  }
 
 function parseDate(UTC) {
     console.log()
@@ -32,7 +29,6 @@ function parseDate(UTC) {
 function createRecordEntry(value) {
 
     let div = "";
-
     Object.entries(value).forEach(([key,value]) => {
         div += `
         <div class="recordEntry">
@@ -100,6 +96,10 @@ function deleteRecord(event){
 
 }
 
+function viewRecord(event){
+    window.location.assign(`view.html?id=${parseInt(event.target.dataset.id)}`)
+}
+
 window.onload = function () {
     openDB(DATABASE_NAME, 1, upgradeDB)
         .then((database) => {
@@ -119,7 +119,7 @@ window.onload = function () {
                     let viewButtons = document.getElementsByClassName("btnView");
 
                     Array.from(viewButtons).forEach(button => {
-
+                        button.addEventListener("click",viewRecord)
                     });
 
                 })
