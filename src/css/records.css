@@ -13,7 +13,8 @@
 .recordEntry {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;;
+    flex-wrap: wrap;
+    ;
     align-items: baseline;
 }
 
@@ -34,4 +35,21 @@ h2, h3 {
 
 h3 {
     text-align: center;
+}
+
+.dropdown {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+}
+
+.active {
+    background-color: white;
+}
+
+.dropdown-body {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
 }
