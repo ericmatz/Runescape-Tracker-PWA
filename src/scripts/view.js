@@ -1,12 +1,5 @@
-import {openDB, getRecordsOnIndex} from "./libraries/IndexedDB_Wrapper_Promises/database.js"
-import {DATABASE_NAME,upgradeDB} from "./utilities.js"
-
-function parseDate(UTC) {
-    console.log()
-    let date = new Date(UTC);
-    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-}
-
+import {openDB, getRecordsOnKeyPath} from "./libraries/IndexedDB_Wrapper_Promises/database.js"
+import {DATABASE_NAME,upgradeDB,parseDate} from "./utilities.js"
 
 window.onload = function () {
     let skillsTable = document.getElementById("skillTable"), otherTable = document.getElementById("otherTable"), usernameHeader = document.getElementById("usernameHeader"), recordTimestamp = document.getElementById("recordTimestamp"), recordID = document.getElementById("recordID");
@@ -16,13 +9,14 @@ window.onload = function () {
 
     openDB(DATABASE_NAME, 1, upgradeDB)
         .then((database) => {
-            getRecordsOnIndex(database, 'records', 'id', parseInt(params.get('id')))
+            getRecordsOnKeyPath(database, 'records', parseInt(params.get('id')))
                 .then((results) => {
                     console.log(results)
                     if(results.length == 1){
                         usernameHeader.innerHTML = results[0].username
                         recordTimestamp.innerHTML = `Date: ${parseDate(results[0].timestamp)}`
                         recordID.innerHTML = `ID: ${results[0].id}`
+                        console.log(results[0])
                         buildTable(results[0].stats)
                     }else{
                         console.error("No results returned for the provided ID")
@@ -42,6 +36,7 @@ window.onload = function () {
             //skill/activity
             Object.entries(values).forEach(([entry, values2]) => {
                 //determine which table it falls under
+                let newRow;
                 Object.keys(values2).length == 3
                     ? (newRow = skillsTable.insertRow(-1))
                     : Object.keys(values2).length == 2

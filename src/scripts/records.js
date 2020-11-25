@@ -1,4 +1,4 @@
-import { openDB, deleteRecords, getRecordsOnObjectStore } from "./libraries/IndexedDB_Wrapper_Promises/database.js"
+import { openDB, deleteRecordsOnKeyPath, getRecordsOnObjectStore } from "./libraries/IndexedDB_Wrapper_Promises/database.js"
 import { DATABASE_NAME, upgradeDB, parseDate } from "./utilities.js"
 
 const OBJECTSTORE = "records";
@@ -65,7 +65,8 @@ function buildResultSet(data) {
 function deleteRecord(event) {
     openDB(DATABASE_NAME, 1, upgradeDB)
         .then(database => {
-            deleteRecords(database, 'records', 'id', parseInt(event.target.dataset.id))
+            console.log(database)
+            deleteRecordsOnKeyPath(database,'records',parseInt(event.target.dataset.id))
                 .then(result => { console.log(result) })
                 .catch(result => { throw result });
         })
